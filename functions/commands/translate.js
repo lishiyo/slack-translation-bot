@@ -1,6 +1,10 @@
 require('dotenv').config()
 
 const lib = require('lib')({token: process.env.STDLIB_TOKEN});
+const utils = lib.utils({
+  service: 'slack-demo-app'
+});
+
 const han = require('han')
 const hanzi = require("hanzi");
 hanzi.start();
@@ -39,7 +43,14 @@ module.exports = (user, channel, text = '', command = {}, botToken = null, callb
     }) // sends a JSON post body
     .end(function(err, res){
       if (err) {
-        console.log(" ========= Yandex ERROR ========= ", err)
+        console.log(" ========= Yandex ERROR ========= ", err);
+        utils.log.error("error message", new Error("yandex error"), (err) => {
+          // Handle error
+          callback(null, {
+            response_type: 'in_channel',
+            text: "something went wrong", // full english translation
+          });
+        });
       }
       // Calling the end function will send the request
       const resp = res.body;
