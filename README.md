@@ -2,21 +2,42 @@
 
 ![demo gif](/demo_wechat.gif?raw=true "Wechat demo")
 
-Slack bot to translate Chinese with pinyin.
+Slack bot that translates Chinese with pinyin.
 
 Toolkit:
+* [StdLib](https://stdlib.com/) for serverless functions as backend
 * [Hanzi](https://github.com/nieldlr/Hanzi) for Chinese segmentation
 * [Han](https://github.com/sofish/han) for Chinese -> pinyin
-* Yandex for Chinese -> English  
-  * Why not Google Translate - Google Cloud isn't working atm with heroku deploy
-* stdlib for serverless functions + slack bot template
+* [Yandex](https://www.yandex.com/) for Chinese -> English (why not Google Translate? Because of difficulties getting Google Cloud to work with heroku deployment atm)
 
 ### Usage
 
-Add the bot to the Slack team: 
-- See minutes 6-8 from https://medium.com/slack-developer-blog/build-a-serverless-slack-bot-in-9-minutes-with-node-js-and-stdlib-b993cfa15358
+```
+git clone https://github.com/lishiyo/slack-translation-bot.git
+npm install
 
-Type `/translate 你吃饭了吗` in slack channel.
+// sign up for StdLib account, create a new app (ex named `slack-translation-bot`), and install command line tools
+npm install lib.cli -g
+
+// sign up for Slack
+// Click "Add a Bot User" to create your bot
+```
+
+Create a `.env` file and add keys for: 
+- `YANDEX_KEY` - get a free API key from https://tech.yandex.com/translate/
+- `STDLIB_TOKEN` - get your app's StdLib Token from [StdLib Dashboard](https://dashboard.stdlib.com/dashboard/)
+- slack tokens - scroll down on the Basic Information panel to find:
+  - `SLACK_CLIENT_ID`
+  - `SLACK_CLIENT_SECRET`
+  - `SLACK_VERFICIATION_TOKEN`
+
+Add the bot to the Slack team:
+- enable Slash Commands (see [minute 6 of this tutorial](https://medium.com/slack-developer-blog/build-a-serverless-slack-bot-in-9-minutes-with-node-js-and-stdlib-b993cfa15358))
+- modify `SLACK_REDIRECT` to `https://<username>.lib.id/<app-name></app-name>@dev/auth/` where <username> is your StdLib username and <app-name> is the StdLib name
+ - ex: https://lishiyo.lib.id/slack-demo-app@dev/auth/
+- Go to  `https://<username>.lib.id/<app-name></app-name>@dev/` and click the "Add to Slack" button to authorize the bot for your team!
+
+Test it out: type `/translate 你吃饭了吗` in a slack channel. 
 
 ### Development
 
